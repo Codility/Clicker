@@ -7,7 +7,7 @@ export default class App extends Component {
   }
   render() {
     if (this.state.nick === null) {
-      return <LoginForm/>
+      return <LoginForm onLogin={this.login.bind(this)}/>
     }
 
     return (
@@ -21,6 +21,10 @@ export default class App extends Component {
   increment() {
     this.setState({ counter : this.state.counter + 1 })
   }
+
+  login(nick) {
+    this.setState({ nick : nick })
+  }
 }
 
 class LoginForm extends Component {
@@ -31,11 +35,12 @@ class LoginForm extends Component {
         <label>Name:</label>
         <input ref="nick" className="form-control"/>
         <br/>
-        <button className="btn btn-primary" onClick={this.login.bind(this)}>Login</button>
+        <button className="btn btn-primary" onClick={this.onClick.bind(this)}>Login</button>
       </div>
     )
   }
-  login() {
+  onClick() {
+    this.props.onLogin(this.refs.nick.value);
   }
 
 }

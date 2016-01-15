@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+var scores = new Firebase("https://amber-inferno-5262.firebaseio.com/clicker/scores/");
+
 export default class App extends Component {
   constructor(props) {
     super(props)
@@ -13,8 +15,20 @@ export default class App extends Component {
 
   componentDidMount() {
     setInterval(() => {
-        this.increment(0);
-    }, 200);
+      this.increment(0);
+    }, 100);
+    setInterval(() => {
+      this.updateDB();
+    }, 300);
+    scores.on('value', snapshot => {
+      let scoresData = snapshot.val();
+      let newUsers = Object.keys(scoresData).reduce((out, key) => {
+        out[key] = scoresData[key].speed;
+        return out;
+      }, {});
+      this.setState({'users': newUsers});
+    });
+
   }
 
   render() {
@@ -46,7 +60,17 @@ export default class App extends Component {
     this.setState({ counter : this.state.counter + n })
     let speed = this.getSpeed()
     this.setState({ speed : speed })
-    // TODO: send speed
+  }
+
+  updateDB() {
+    if (!this.state.nick) {
+      return;
+    }
+    scores.update({
+      [this.state.nick]: {
+        "speed": this.state.speed
+      }
+    });
   }
 
   login(nick) {
@@ -84,10 +108,10 @@ function UsersTable(props) {
     <table className='table table-striped'>
       <tbody>
         <tr>
-          <th> Nick </th>
-          <th> Speed </th>
+          <th>Nick</th>
+          <th>Speed</th>
         </tr>
-        {usersTable.map(x => <tr> <td> {x.nick} </td><td> {x.speed} </td></tr>)}
+        {usersTable.map(x => <tr key={x.nick}><td>{x.nick}</td><td>{x.speed.toFixed(2)} Hz</td></tr>)}
       </tbody>
     </table>
   )

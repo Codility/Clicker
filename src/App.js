@@ -32,18 +32,28 @@ export default class App extends Component {
   }
 
   render() {
+    let header = (
+      <div className="jumbotron">
+        <h1>Clicker</h1>
+        <p>How much possibly faster can you mash that button...?</p>
+      </div>
+    );
+
     if (this.state.nick === null) {
-      return <LoginForm onLogin={this.login.bind(this)}/>
+      return <div>{header}<LoginForm onLogin={this.login.bind(this)}/></div>
     }
 
     return (
-      <div className='row'>
-        <div className='col-md-6'>
-          <button className="btn btn-primary btn-lg btn-block" style={{ height : 200 }}  onClick={this.increment.bind(this, 1)}>Hit!</button>
-          <h1> Your speed is { this.state.speed.toFixed(2)} Hz!</h1>
-        </div>
-        <div className='col-md-6'>
-          <UsersTable users={this.state.users}/>
+      <div>
+        {header}
+        <div className='row'>
+          <div className='col-md-6'>
+            <button className="btn btn-primary btn-lg btn-block" style={{ height : 200 }}  onClick={this.increment.bind(this, 1)}>Hit!</button>
+            <h1> Your speed is { this.state.speed.toFixed(2)} Hz!</h1>
+          </div>
+          <div className='col-md-6'>
+            <UsersTable users={this.state.users}/>
+          </div>
         </div>
       </div>
     )

@@ -102,7 +102,7 @@ function UsersTable(props) {
     usersTable.push({ nick : nick, speed : props.users[nick]})
   }
 
-  usersTable.sort( (a, b) => a.speed - b.speed)
+  usersTable.sort( (a, b) => b.speed - a.speed)
 
   return (
     <table className='table table-striped'>

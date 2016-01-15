@@ -3,11 +3,18 @@ import React, { Component } from 'react';
 export default class App extends Component {
   constructor(props) {
     super(props)
+
     this.state = { counter : 1, nick : null,
       users : { 'Jakub' : 50, 'Kos' : 50, 'Marcin' : 60 },
       speed : 0,
       start_time : null
     }
+  }
+
+  componentDidMount() {
+    setInterval(() => {
+        this.increment(0);
+    }, 200);
   }
 
   render() {
@@ -18,7 +25,7 @@ export default class App extends Component {
     return (
       <div className='row'>
         <div className='col-md-6'>
-          <button className="btn btn-primary btn-lg btn-block" style={{ height : 200 }}  onClick={this.increment.bind(this)}>Hit!</button>
+          <button className="btn btn-primary btn-lg btn-block" style={{ height : 200 }}  onClick={this.increment.bind(this, 1)}>Hit!</button>
           <h1> Your speed is { this.state.speed.toFixed(2)} Hz!</h1>
         </div>
         <div className='col-md-6'>
@@ -32,11 +39,11 @@ export default class App extends Component {
     return 1000 * this.state.counter / (new Date().getTime() - this.state.start_time)
   }
 
-  increment() {
+  increment(n) {
     if (this.state.start_time === null) {
       this.setState({ start_time : new Date().getTime() })
     }
-    this.setState({ counter : this.state.counter + 1 })
+    this.setState({ counter : this.state.counter + n })
     let speed = this.getSpeed()
     this.setState({ speed : speed })
     // TODO: send speed

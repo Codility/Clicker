@@ -4,8 +4,12 @@ export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = { counter : 1, nick : null,
-      users : { 'Jakub' : 50, 'Kos' : 50, 'Marcin' : 60 }}
+      users : { 'Jakub' : 50, 'Kos' : 50, 'Marcin' : 60 },
+      speed : 0,
+      start_time : null
+    }
   }
+
   render() {
     if (this.state.nick === null) {
       return <LoginForm onLogin={this.login.bind(this)}/>
@@ -13,23 +17,29 @@ export default class App extends Component {
 
     return (
       <div className='row'>
-        <div className='col-md-8'>
+        <div className='col-md-6'>
+          <button className="btn btn-primary btn-lg btn-block" style={{ height : 200 }}  onClick={this.increment.bind(this)}>Hit!</button>
+          <h1> Your speed is { this.state.speed.toFixed(2)} Hz!</h1>
         </div>
-        <div className='col-md-4'>
+        <div className='col-md-6'>
           <UsersTable users={this.state.users}/>
         </div>
       </div>
     )
-   /* return (
-      <div>
-        <h1>Counter: {this.state.counter }.</h1>
-        <button onClick={this.increment.bind(this)}> Increment </button>
-      </div>
-    );*/
+  }
+
+  getSpeed() {
+    return 1000 * this.state.counter / (new Date().getTime() - this.state.start_time)
   }
 
   increment() {
+    if (this.state.start_time === null) {
+      this.setState({ start_time : new Date().getTime() })
+    }
     this.setState({ counter : this.state.counter + 1 })
+    let speed = this.getSpeed()
+    this.setState({ speed : speed })
+    // TODO: send speed
   }
 
   login(nick) {

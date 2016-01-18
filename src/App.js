@@ -32,10 +32,11 @@ export default class App extends Component {
   }
 
   render() {
+    let greeting = this.state.nick === null ? null : "Hi " + this.state.nick + "! "
     let header = (
       <div className="jumbotron">
         <h1>Clicker</h1>
-        <p>How much possibly faster can you mash that button...?</p>
+        <p>{greeting}How much possibly faster can you mash that button...?</p>
       </div>
     );
 
